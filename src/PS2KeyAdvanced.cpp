@@ -717,7 +717,7 @@ if( index == length )
 /* valid found values only */
 if( retdata > 0 )
   {
-  if( retdata <= PS2_KEY_CAPS )
+  if( !(_mode & _NO_LOCKS) && retdata <= PS2_KEY_CAPS )
     {   // process lock keys need second make to turn off
     if( PS2_keystatus & _BREAK )
       {
@@ -776,7 +776,7 @@ if( retdata > 0 )
       }
     else
       // Numeric keypad ONLY works in numlock state or when _SHIFT status
-      if( retdata >= PS2_KEY_KP0 && retdata <=  PS2_KEY_KP_DOT )
+      if( !(_mode & _NO_LOCKS) && retdata >= PS2_KEY_KP0 && retdata <=  PS2_KEY_KP_DOT )
         if( !( PS2_led_lock & PS2_LOCK_NUM ) || ( PS2_keystatus & _SHIFT ) )
 #if defined( PS2_REQUIRES_PROGMEM )
           retdata = pgm_read_byte( &scroll_remap[ retdata - PS2_KEY_KP0 ] );
@@ -879,6 +879,15 @@ _mode &= ~_NO_REPEATS;
 _mode |= data ? _NO_REPEATS : 0;
 }
 
+ /* Set library to not repeat make codes for _CTRL, _ALT, _GUI, _SHIFT
+            1 = no repeat codes
+            0 = send repeat codes  */
+void PS2KeyAdvanced::setNoLocks( uint8_t data )
+{
+_mode &= ~_NO_LOCKS;
+_mode |= data ? _NO_LOCKS : 0;
+}
+
 
 /* Resets keyboard when reset has completed
    keyboard sends AA - Pass or FC for fail        */
@@ -891,7 +900,6 @@ if( ( send_byte( PS2_KEY_IGNORE ) ) ) // wait data PS2_KC_BAT or PS2_KC_ERROR
 // LEDs and KeyStatus Reset too... to match keyboard
 PS2_led_lock = 0;
 PS2_keystatus = 0;
-}
 
 
 /*  Send Typematic rate/delay command to keyboard

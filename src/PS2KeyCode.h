@@ -76,6 +76,7 @@
 /* Key Repeat defines */
 #define _NO_BREAKS       0x08
 #define _NO_REPEATS      0x80
+#define _NO_LOCKS        0x01
 
 /* PS2_keystatus byte masks (from 16 bit int masks) */
 #define _BREAK    ( PS2_BREAK >> 8 )

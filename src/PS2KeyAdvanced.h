@@ -397,6 +397,12 @@ class PS2KeyAdvanced {
             0 = send repeat codes  */
     void setNoRepeat( uint8_t );
 
+    /* Set library to not replicate cap/scroll/num lock behaviour 
+       This is essential for USB HID compliance
+        1 = no lock on locking key codes
+        0 = lock as normal  */
+    void setNoLocks( uint8_t );
+
     /* Resets keyboard when reset has completed
        keyboard sends AA - Pass or FC for fail
        Read from keyboard data buffer */
